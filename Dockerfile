@@ -83,6 +83,10 @@ ENV MONGO_VERSION 3.6.20
 # bashbrew-architectures:amd64 arm64v8
 RUN echo "deb http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR multiverse" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list"
 
+COPY docker-entrypoint.sh /usr/local/bin/
+COPY docker-entrypoint.d/* /docker-entrypoint.d/
+
+
 RUN set -x \
 # installing "mongodb-enterprise" pulls in "tzdata" which prompts for input
 	&& export DEBIAN_FRONTEND=noninteractive \
@@ -95,16 +99,15 @@ RUN set -x \
 		${MONGO_PACKAGE}-tools=$MONGO_VERSION \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /var/lib/mongodb \
-	&& mv /etc/mongod.conf /etc/mongod.conf.orig
+	&& mv /etc/mongod.conf /etc/mongod.conf.orig \
+	&& chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint.d/*
 
 RUN mkdir -p /data/db /data/configdb \
 	&& chown -R mongodb:mongodb /data/db /data/configdb
 VOLUME /data/db /data/configdb
 
-COPY docker-entrypoint.sh /usr/local/bin/
-COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 27017
 CMD ["mongod"]
