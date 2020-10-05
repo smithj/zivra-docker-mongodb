@@ -84,7 +84,7 @@ ENV MONGO_VERSION 3.6.20
 RUN echo "deb http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR multiverse" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list"
 
 COPY docker-entrypoint.sh /usr/local/bin/
-COPY docker-entrypoint.d/* /docker-entrypoint.d/
+COPY docker-entrypoint-initdb.d/* /docker-entrypoint-initdb.d/
 
 
 RUN set -x \
@@ -100,7 +100,7 @@ RUN set -x \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /var/lib/mongodb \
 	&& mv /etc/mongod.conf /etc/mongod.conf.orig \
-	&& chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint.d/*
+    && chmod +x /usr/local/bin/docker-entrypoint.sh  /docker-entrypoint-initdb.d/*
 
 RUN mkdir -p /data/db /data/configdb \
 	&& chown -R mongodb:mongodb /data/db /data/configdb
