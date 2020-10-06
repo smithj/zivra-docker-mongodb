@@ -100,6 +100,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh  /docker-entrypoint-initdb.d/* 
 	&& mv /etc/mongod.conf /etc/mongod.conf.orig 
 	
 
+USER mongod
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 27017
