@@ -6,7 +6,9 @@
 // notification / notification / mhs - notification
 // reporting / reporting / mhs - reporting
 // lineconfig / lineconfig / mhs - line - config
-
+// messagestore - ro / messagestore / supernova
+// lineconfig - ro / lineconfig / mhs - line - config
+// dupcheck - ro / dupcheck / mhs - duplicate - check
 
 db.createUser(
     {
@@ -87,6 +89,49 @@ db.createUser(
         ]
     }
 );
+
+// messagestore - ro / messagestore / supernova
+// lineconfig - ro / lineconfig / mhs - line - config
+// dupcheck-ro / dupcheck / mhs - duplicate - check
+db.createUser(
+    {
+        user: "messagestore-ro",
+        pwd: "messagestore-ro",
+        roles: [
+            {
+                role: "readWrite",
+                db: "supernova"
+            }
+        ]
+    }
+);
+
+db.createUser(
+    {
+        user: "lineconfig-ro",
+        pwd: "lineconfig-ro",
+        roles: [
+            {
+                role: "readWrite",
+                db: "mhs-line-config"
+            }
+        ]
+    }
+);
+
+db.createUser(
+    {
+        user: "dupcheck-ro",
+        pwd: "dupcheck-ro",
+        roles: [
+            {
+                role: "readWrite",
+                db: "mhs-duplicate-check"
+            }
+        ]
+    }
+);
+
 
 db.createUser(
     {
