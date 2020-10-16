@@ -10,8 +10,10 @@ services:
             - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
             - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
             - MONGO_INITDB_DATABASE=project
-        # volumes:
-        #     - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+        volumes:
+            - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+        ports:
+            - "27017:27017"
     mongo-express:
         image: mongo-express
         environment:
@@ -23,8 +25,8 @@ services:
             - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
             - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
             - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
-            - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_ROOT_USER}
-            - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_ROOT_PASSWORD}
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=clusterAdmin
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
         depends_on:
             - mongo
         ports:
